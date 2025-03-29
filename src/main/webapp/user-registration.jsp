@@ -8,6 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>User Registration</title>
 	<style type="text/css">
+		*{
+			font-family:arial;
+		}
         table,th,td{
             border: 1px solid black;
             border-collapse: collapse;
@@ -20,7 +23,6 @@
 			display: inline-block;
 			margin-top: 24px;
 		}
-
 		.input{
 			height: 20px;
 			width: 300px;
@@ -36,15 +38,7 @@
 				<thead>
 					<tr>
 						<th colspan="2"><h3>Registration</h3></th>
-						<c:if test="${not empty success}">
-						<p>${success}</p>
-						<c:remove var="success"/>
-						</c:if>
 						
-						<c:if test="${not empty error}">
-						<p>${error}</p>
-						<c:remove var="error"/>
-						</c:if>
 					</tr>
 				</thead>
 				<tbody>

@@ -34,7 +34,7 @@ pageEncoding="UTF-8"%>
         <tbody>
             <tr>
 				<th><a href="./slots.jsp">Home</a></th>
-                <th><a href="./addslot.jsp">Add Slots</a></th>
+                <th><a href="./slots.jsp">All Slots</a></th>
                 <th><a href="./booking-history.jsp">Booking History</a></th>
                 <th><a href="./logout">Log Out</a></th>
                 <th colspan="5"><u style="text-align:right">Welcome, ${userName}</u></th>

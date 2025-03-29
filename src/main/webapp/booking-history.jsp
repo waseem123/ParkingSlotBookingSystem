@@ -3,6 +3,13 @@
 <%@ page
 	import="java.util.*, models.Booking, controllers.BookingOperations"%>
 
+<%@ page import="jakarta.servlet.http.HttpSession"%>
+<%
+HttpSession sessionObj = request.getSession(false);
+if (sessionObj == null || sessionObj.getAttribute("username") == null) {
+	response.sendRedirect("login.jsp?error=Please login first.");
+}
+%>
 <%
 BookingOperations bo = new BookingOperations();
 List<Booking> bookings = bo.getAllBookings();
@@ -11,44 +18,27 @@ List<Booking> bookings = bo.getAllBookings();
 <html>
 <head>
 <title>My Bookings</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
+<style type="text/css">
+* {
+	font-family: Arial;
 }
 
-table {
-	width: 100%;
+table, th, td {
+	border: 1px solid black;
 	border-collapse: collapse;
-	margin-top: 20px;
-}
-
-th, td {
-	border: 1px solid #ddd;
 	padding: 8px;
-	text-align: center;
+	text-align: trainer;
 }
 
-th {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.cancel-btn {
-	background-color: red;
-	color: white;
-	padding: 5px;
-	text-decoration: none;
-	border-radius: 4px;
-}
-
-.cancel-btn:hover {
-	background-color: darkred;
+.input {
+	width: 300px;
+	height: 40px;
 }
 </style>
 </head>
 <body>
-	<h2 align="center">My Parking Slot Bookings</h2>
+	<jsp:include page="admin-header.jsp"></jsp:include>
+	<h2>Slot booking history</h2>
 
 	<%
 	if (bookings.isEmpty()) {
@@ -68,7 +58,6 @@ th {
 			<th>Unpark Time</th>
 
 			<th>Status</th>
-			<th>Action</th>
 		</tr>
 		<%
 		for (Booking booking : bookings) {
@@ -82,28 +71,6 @@ th {
 			<td><%=booking.getParkTime()%></td>
 			<td><%=booking.getUnparkTime()%></td>
 			<td><%=booking.getBookingStatus()%></td>
-			<td>
-				<%
-				String bookingStatus = booking.getBookingStatus();
-				if (bookingStatus.equalsIgnoreCase("Booked")) {
-				%><a
-				href="parkVehicle?booking_id=<%=booking.getBookingId()%>"
-				class="cancel-btn">Park</a>
-				 <a
-				href="cancelBooking?booking_id=<%=booking.getBookingId()%>"
-				class="cancel-btn">Cancel</a>
-				 <%
- 				}else if(bookingStatus.equalsIgnoreCase("Parked")){%>
-					<a
-					href="unparkVehicle?booking_id=<%=booking.getBookingId()%>"
-					class="cancel-btn">Unpark</a>
-				<%}else if(bookingStatus.equalsIgnoreCase("Cancelled")){%>
-					<span style="color: gray;">-</span>
-				<%} else {
-				 %> <span style="color: gray;">Not Cancellable</span> <%
-				 }
-				 %>
-			</td>
 		</tr>
 		<%
 		}

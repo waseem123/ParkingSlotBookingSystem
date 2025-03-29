@@ -2,43 +2,24 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, controllers.DatabaseConnection"%>
 
+<%@ page import="jakarta.servlet.http.HttpSession"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style> 
-body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
-	background-color: #f0f0f0;
-}
-
-table {
-	width: 80%;
-	margin: auto;
+<title>View Bookings</title>
+<style type="text/css">
+table, th, td {
+	border: 1px solid black;
 	border-collapse: collapse;
-	background-color: white;
-}
-
-th, td {
-	padding: 10px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
-}
-
-th {
-	background-color: #3E5926;
-	color: white;
-}
-
-tr:hover {
-	background-color: #f5f5f5;
-}
-
-h1 {
+	padding: 24px;
 	text-align: center;
-	color: #3E5926;
+}
+
+.input {
+	height: 20px;
+	width: 300px;
+	padding: 8px;
 }
 </style>
 </head>

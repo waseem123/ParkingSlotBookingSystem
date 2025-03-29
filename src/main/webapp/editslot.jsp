@@ -3,6 +3,14 @@
 <%@ page
 	import="java.sql.*,models.Vehicle,models.Slot, controllers.DatabaseConnection, controllers.VehicleOperations,controllers.SlotOperations, java.util.*"%>
 
+
+<%@ page import="jakarta.servlet.http.HttpSession"%>
+<%
+HttpSession sessionObj = request.getSession(false);
+if (sessionObj == null || sessionObj.getAttribute("username") == null) {
+	response.sendRedirect("login.jsp?error=Please login first.");
+}
+%>
 <%
 int slotId = Integer.parseInt(request.getParameter("id"));
 SlotOperations so = new SlotOperations();
@@ -13,7 +21,25 @@ Slot slot = so.getSlotById(slotId);
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Edit Slot</title>
+<style>
+body {
+	font-family: "Arial"
+}
+
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 8px;
+	text-align: center;
+}
+
+.input {
+	height: 24px;
+	padding: 16px;
+	width: 300px;
+}
+</style>
 </head>
 <body>
 	<%
@@ -23,12 +49,9 @@ Slot slot = so.getSlotById(slotId);
 		<form action="save-slot-changes" method="POST">
 			<tr>
 				<td>Slot Name</td>
-				<td>
-					<input type="hidden" name="slot_id"
-					value="<%=slot.getSlotId()%>">
-					<input type="text" name="slot_name"
-					value="<%=slot.getSlotName()%>">
-				</td>
+				<td><input type="hidden" name="slot_id"
+					value="<%=slot.getSlotId()%>"> <input type="text"
+					name="slot_name" value="<%=slot.getSlotName()%>"></td>
 			</tr>
 
 			<tr>
@@ -36,55 +59,44 @@ Slot slot = so.getSlotById(slotId);
 				<td><input type="text" name="slot_location"
 					value="<%=slot.getSlotLocation()%>"></td>
 			</tr>
-	
+
 			<tr>
 				<td>Vehicle Type</td>
-	
+
 				<td>
 					<%
 					String vtype = slot.getSlotVehicleType();
 					if (vtype.equals("car")) {
-					%> <label>
-							<input type="radio" value="bike" name="vehicle_type"> Bike
-						</label>
-						<label>
-							<input type="radio" checked value="car" name="vehicle_type">Car
-						</label>
-						<label>
-							<input type="radio" value="truck" name="vehicle_type">Truck
-						</label> <%
-					 } else if (vtype.equals("bike")) {
-					 %> <label>
-					 		<input type="radio" checked value="bike" name="vehicle_type">Bike
-					 	</label>
-					 	<label>
-					 		<input type="radio" value="car" name="vehicle_type">Car
-					 	</label>
-					 	<label>
-					 		<input
-									type="radio" value="truck" name="vehicle_type">Truck
-					 	</label>
-					<% } else {
-					 %> 
-					 	<label>
-					 		<input type="radio" value="bike" name="vehicle_type">Bike
-					 	</label>
-					 	<label>
-					 		<input type="radio" value="car" name="vehicle_type">Car
-					 	</label>
-					 	<label>
-					 		<input
-									type="radio" checked value="truck" name="vehicle_type">Truck
-					 	</label>
-					  <% } %>
+					%> <label> <input type="radio" value="bike"
+						name="vehicle_type"> Bike
+				</label> <label> <input type="radio" checked value="car"
+						name="vehicle_type">Car
+				</label> <label> <input type="radio" value="truck"
+						name="vehicle_type">Truck
+				</label> <%
+ } else if (vtype.equals("bike")) {
+ %> <label> <input type="radio" checked value="bike"
+						name="vehicle_type">Bike
+				</label> <label> <input type="radio" value="car" name="vehicle_type">Car
+				</label> <label> <input type="radio" value="truck"
+						name="vehicle_type">Truck
+				</label> <%
+ } else {
+ %> <label> <input type="radio" value="bike" name="vehicle_type">Bike
+				</label> <label> <input type="radio" value="car" name="vehicle_type">Car
+				</label> <label> <input type="radio" checked value="truck"
+						name="vehicle_type">Truck
+				</label> <%
+ }
+ %>
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td>Slot Price</td>
-				<td>
-					<input type="text" name="slot_price" value="<%=slot.getSlotPrice()%>">
-					<input type="hidden" name="slot_available" value="<%=slot.getSlotAvailability() %>">
+				<td><input type="text" name="slot_price"
+					value="<%=slot.getSlotPrice()%>"> <input type="hidden"
+					name="slot_available" value="<%=slot.getSlotAvailability()%>">
 				</td>
 			</tr>
 			<tr>
@@ -95,7 +107,7 @@ Slot slot = so.getSlotById(slotId);
 	<%
 	} else {
 	%>
-		<h3>No data found.</h3>
+	<h3>No data found.</h3>
 	<%
 	}
 	%>

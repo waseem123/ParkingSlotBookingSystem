@@ -3,6 +3,13 @@
 <%@ page
 	import="java.sql.*,models.Vehicle,models.Slot, controllers.DatabaseConnection, controllers.VehicleOperations,controllers.SlotOperations, java.util.*"%>
 
+<%@ page import="jakarta.servlet.http.HttpSession"%>
+<%
+HttpSession sessionObj = request.getSession(false);
+if (sessionObj == null || sessionObj.getAttribute("username") == null) {
+	response.sendRedirect("login.jsp?error=Please login first.");
+}
+%>
 <%
 // Handling form submission
 String vehicleNumber = request.getParameter("vehicle_number");
@@ -36,81 +43,56 @@ if (vehicleNumber != null && location != null) {
 <title>Insert title here</title>
 <style>
 body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
+	font-family: "Arial"
 }
 
-form {
-	width: 50%;
-	margin: auto;
-	padding: 20px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	background-color: #f9f9f9;
-}
-
-label {
-	font-weight: bold;
-}
-
-select, input {
-	width: 100%;
-	padding: 8px;
-	margin: 10px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-button {
-	background-color: #4CAF50;
-	color: white;
-	padding: 10px;
-	border: none;
-	cursor: pointer;
-}
-
-button:hover {
-	background-color: #45a049;
-}
-
-table {
-	width: 100%;
-	margin-top: 20px;
+table, th, td {
+	border: 1px solid black;
 	border-collapse: collapse;
-}
-
-th, td {
-	border: 1px solid #ddd;
 	padding: 8px;
 	text-align: center;
 }
 
-th {
-	background-color: #4CAF50;
-	color: white;
+.input {
+	height: 24px;
+	padding: 16px;
+	width: 300px;
 }
 </style>
 </head>
 <body>
-	<table style="border: 1px solid black">
+
+	<table style="margin-bottom: 16px">
+		<tr>
+			<td><a href="my-vehicles.jsp">My Vehicles</a></td>
+			<td><a href="searchSlot.jsp">Book a Parking Slot</a></td>
+			<td><a href="my-bookings.jsp">View Bookings</a></td>
+			<td><a href="logout.jsp">Logout</a></td>
+		</tr>
+	</table>
+	<h2>All available slots</h2>
+
+	<h5>Vehicle Details</h5>
+	<table>
 		<tr>
 			<th>ID</th>
-			<th><%=vehicle.getVehicleId()%></th>
+			<td><%=vehicle.getVehicleId()%></td>
 		</tr>
 		<tr>
 			<th>VEHICLE NAME</th>
-			<th><%=vehicle.getVehicleName()%></th>
+			<td><%=vehicle.getVehicleName()%></td>
 		</tr>
 		<tr>
 			<th>VEHICLE NUMBER</th>
-			<th><%=vehicle.getVehicleNumber()%></th>
+			<td><%=vehicle.getVehicleNumber()%></td>
 		</tr>
 		<tr>
 			<th>VEHICLE TYPE</th>
-			<th><%=vehicle.getVehicleType()%></th>
+			<td><%=vehicle.getVehicleType()%></td>
 		</tr>
 	</table>
 
+	<h5>Parking slot details</h5>
 	<%
 	if (allSlots.size() <= 0) { // No data found
 		out.println("<p style='color:red; text-align:center;'>No available slots found for " + vehicleType + " in "
@@ -133,17 +115,18 @@ th {
 			<td><%=s.getSlotPrice()%> ₹</td>
 			<td>
 				<%
-					if(s.getSlotAvailability()){%>
-						<form action="bookSlot" method="post">
-						<input type="hidden" name="vehicle_number"
-							value="<%=vehicle.getVehicleNumber()%>"> <input
-							type="hidden" name="slot_id" value="<%=s.getSlotId()%>">
-						<button type="submit">Book Now</button>
-					</form>
-					<%}else{
-						out.println("Not Available");
-					}
+				if (s.getSlotAvailability()) {
 				%>
+				<form action="bookSlot" method="post">
+					<input type="hidden" name="vehicle_number"
+						value="<%=vehicle.getVehicleNumber()%>"> <input
+						type="hidden" name="slot_id" value="<%=s.getSlotId()%>">
+					<button type="submit">Book Now</button>
+				</form> <%
+ } else {
+ out.println("Not Available");
+ }
+ %>
 
 			</td>
 		</tr>

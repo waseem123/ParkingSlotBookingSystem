@@ -3,10 +3,16 @@
 <%@ page
 	import="java.sql.*,models.Vehicle,models.Slot, controllers.DatabaseConnection, controllers.VehicleOperations,controllers.SlotOperations, java.util.*"%>
 
-
+<%@ page import="jakarta.servlet.http.HttpSession"%>
+<%
+HttpSession sessionObj = request.getSession(false);
+if (sessionObj == null || sessionObj.getAttribute("username") == null) {
+	response.sendRedirect("login.jsp?error=Please login first.");
+}
+%>
 <html>
 <head>
-<title>All Jobs</title>
+<title>All Slots</title>
 <style type="text/css">
 table, th, td {
 	border: 1px solid black;
@@ -24,21 +30,14 @@ table, th, td {
 
 <body>
 	<jsp:include page="admin-header.jsp"></jsp:include>
-	<c:if test="${userType!=1}">
-		<c:redirect url="/index.jsp" />
-	</c:if>
 	<h2>All Slots</h2>
-	<c:if test="${not empty success}">
-		<p>${success}</p>
-		<c:remove var="success" />
-	</c:if>
-
-	<c:if test="${not empty error}">
-		<p>${error}</p>
-		<c:remove var="error" />
-	</c:if>
 	<table>
-		<thead>
+		<tr>
+			<td colspan=7><a style="display: block; float: right"
+				href="addslot.jsp">Add new slot</a></td>
+		</tr>
+
+		<tbody>
 			<tr>
 				<th>ID</th>
 				<th>Slot Name</th>
@@ -48,9 +47,6 @@ table, th, td {
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
-		</thead>
-		<tbody>
-
 			<%
 			SlotOperations so = new SlotOperations();
 			List<Slot> slotList = so.getAllSlots();
